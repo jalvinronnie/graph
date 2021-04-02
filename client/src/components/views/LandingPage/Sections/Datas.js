@@ -37,31 +37,31 @@ const price = [
 const tags = [
     {
         "_id": 1,
-        "name": "Africa"
+        "name": "Digital Painting"
     },
     {
         "_id": 2,
-        "name": "Europe"
+        "name": "Cartoon"
     },
     {
         "_id": 3,
-        "name": "Asia"
+        "name": "Pencil Drawing"
     },
     {
         "_id": 4,
-        "name": "North America"
+        "name": "Landscape"
     },
     {
         "_id": 5,
-        "name": "South America"
+        "name": "Logo"
     },
     {
         "_id": 6,
-        "name": "Australia"
+        "name": "Advertisement"
     },
     {
         "_id": 7,
-        "name": "Antarctica"
+        "name": "Font"
     }
 ]
 

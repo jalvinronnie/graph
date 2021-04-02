@@ -7,13 +7,13 @@ const { Title } = Typography;
 const { TextArea } = Input;
 
 const Tags = [
-    { key: 1, value: "Africa" },
-    { key: 2, value: "Europe" },
-    { key: 3, value: "Asia" },
-    { key: 4, value: "North America" },
-    { key: 5, value: "South America" },
-    { key: 6, value: "Australia" },
-    { key: 7, value: "Antarctica" }
+    { key: 1, value: "Digital Painting" },
+    { key: 2, value: "Cartoon" },
+    { key: 3, value: "Pencil Drawing" },
+    { key: 4, value: "Landscape" },
+    { key: 5, value: "Logo" },
+    { key: 6, value: "Advertisement" },
+    { key: 7, value: "Font" }
 ]
 
 export class UploadProductPage extends Component {

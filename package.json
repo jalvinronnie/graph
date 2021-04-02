@@ -11,9 +11,11 @@
     "start": "node server/index.js",
     "backend": "nodemon server/index.js",
     "frontend": "npm run front --prefix client",
-    "dev": "concurrently \"npm run backend\" \"npm run start --prefix client\""
+    "dev": "concurrently \"npm run backend\" \"npm run start --prefix client\"",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm run install-client && npm run build",
+    "install-client": "cd client && npm install"
   },
-  "author": "John ahn",
+  "author": "Alvin Ronnie",
   "license": "ISC",
   "dependencies": {
     "async": "^3.1.0",
