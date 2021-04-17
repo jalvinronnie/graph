@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@firebase/app": "^0.6.17",
+    "@firebase/storage": "^0.4.5",
     "antd": "^3.24.1",
     "axios": "^0.18.0",
     "formik": "^1.5.8",

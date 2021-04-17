@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { Typography, Button, Form, message, Input, Icon } from 'antd';
 import FileUpload from '../../utils/FileUpload'
 import Axios from 'axios';
+import { app } from '../../../firebase';
+const storageRef = app.storage().ref();
 
 const { Title } = Typography;
 const { TextArea } = Input;
@@ -45,7 +47,7 @@ function UploadProductPage(props) {
     const updateImages = (newImages) => {
         setImages(newImages)
     }
-    const onSubmit = (event) => {
+    const onSubmit = async (event) => {
         event.preventDefault();
 
 
@@ -54,14 +56,38 @@ function UploadProductPage(props) {
             return alert('fill all the fields first!')
         }
 
+        // upload files to firebase and get download urls.
+        const imgURLs = await Promise.all(Images.map(img => {
+            return new Promise(async (resolve, reject) => {
+                try {
+                    const timeStamp = new Date().getTime();
+                    const imgName = `${img.name.split('.')[0]}-${timeStamp}.${img.name.split('.')[img.name.split('.').length - 1]}`;
+                    const imgStorageRef = storageRef.child(`designs/${imgName}`);
+
+                    await imgStorageRef.put(img);
+                    const url = await imgStorageRef.getDownloadURL();
+                    resolve(url);
+
+                    console.log(url);
+                } catch (err) {
+                    console.log(err);
+                    reject(err);
+                }
+            })
+        }))
+
+        console.log(imgURLs);
+
         const variables = {
             writer: props.user.userData._id,
             title: TitleValue,
             description: DescriptionValue,
             price: PriceValue,
-            images: Images,
+            images: imgURLs,
             tags: TagValue,
         }
+
+        console.log(variables);
 
         Axios.post('/api/product/uploadProduct', variables)
             .then(response => {
