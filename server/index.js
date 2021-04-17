@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const cors = require('cors')
+app.disable("x-powered-by");
 
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
@@ -20,7 +21,9 @@ const connect = mongoose.connect(config.mongoURI, { useNewUrlParser: true, useUn
   .then(() => console.log('MongoDB Connected...'))
   .catch(err => console.log(err));
 
-app.use(cors())
+if (process.env.NODE_ENV !== 'production') {
+  app.use(cors());
+}
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
