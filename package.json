@@ -3,16 +3,16 @@
   "version": "1.0.0",
   "description": "react boiler plate",
   "main": "index.js",
-  "engine": {
+  "engines": {
     "node": "10.16.0",
     "npm": "6.9.0"
   },
   "scripts": {
-    "start": "node server/index.js",
-    "backend": "nodemon server/index.js",
+    "start": "node index.js",
+    "backend": "nodemon index.js",
     "frontend": "npm run front --prefix client",
     "dev": "concurrently \"npm run backend\" \"npm run start --prefix client\"",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm run install-client && npm run build",
+    "heroku-postbuild": "npm run install-client && npm run build",
     "install-client": "cd client && npm install"
   },
   "author": "Alvin Ronnie",
