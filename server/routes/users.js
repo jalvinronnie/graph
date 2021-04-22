@@ -4,6 +4,7 @@ const { User } = require("../models/User");
 const { Product } = require('../models/Product');
 const { auth } = require("../middleware/auth");
 const { Payment } = require('../models/Payment');
+const { isCustomer } = require('../middleware/roles');
 
 const async = require('async');
 
@@ -14,7 +15,7 @@ const async = require('async');
 router.get("/auth", auth, (req, res) => {
     res.status(200).json({
         _id: req.user._id,
-        isAdmin: req.user.role === 0 ? false : true,
+        isAdmin: req.user.role === 'admin',
         isAuth: true,
         email: req.user.email,
         name: req.user.name,
@@ -74,7 +75,7 @@ router.get("/logout", auth, (req, res) => {
 });
 
 
-router.get('/addToCart', auth, (req, res) => {
+router.get('/addToCart', auth, isCustomer, (req, res) => {
 
     User.findOne({ _id: req.user._id }, (err, userInfo) => {
         let duplicate = false;
@@ -121,7 +122,7 @@ router.get('/addToCart', auth, (req, res) => {
 });
 
 
-router.get('/removeFromCart', auth, (req, res) => {
+router.get('/removeFromCart', auth, isCustomer, (req, res) => {
 
     User.findOneAndUpdate(
         { _id: req.user._id },
@@ -149,7 +150,7 @@ router.get('/removeFromCart', auth, (req, res) => {
 })
 
 
-router.get('/userCartInfo', auth, (req, res) => {
+router.get('/userCartInfo', auth, isCustomer, (req, res) => {
     User.findOne(
         { _id: req.user._id },
         (err, userInfo) => {
@@ -173,7 +174,7 @@ router.get('/userCartInfo', auth, (req, res) => {
 
 
 
-router.post('/successBuy', auth, (req, res) => {
+router.post('/successBuy', auth, isCustomer, (req, res) => {
     let history = [];
     let transactionData = {};
 
@@ -252,7 +253,7 @@ router.post('/successBuy', auth, (req, res) => {
 })
 
 
-router.get('/getHistory', auth, (req, res) => {
+router.get('/getHistory', auth, isCustomer, (req, res) => {
     User.findOne(
         { _id: req.user._id },
         (err, doc) => {
