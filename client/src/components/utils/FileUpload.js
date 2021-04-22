@@ -2,29 +2,28 @@ import React, { useState } from 'react'
 import Dropzone from 'react-dropzone';
 import { Icon } from 'antd';
 import Axios from 'axios';
+
 function FileUpload(props) {
 
     const [Images, setImages] = useState([])
 
-    const onDrop = (files) => {
+    const onDrop = async (files) => {
+        try {
+            const file = files[0];
+            // const timeStamp = new Date().getTime();
+            // const fileName = `${file.name.split('.')[0]}-${timeStamp}.${file.name.split('.')[file.name.split('.').length - 1]}`;
+            // const fileStorageRef = storageRef.child(`designs/${fileName}`);
 
-        let formData = new FormData();
-        const config = {
-            header: { 'content-type': 'multipart/form-data' }
+            // await fileStorageRef.put(file);
+            // const url = await fileStorageRef.getDownloadURL();
+
+            setImages(prev => [...prev, URL.createObjectURL(file)]);
+            props.refreshFunction(prev => [...prev, file])
+
+        } catch (error) {
+            console.log(error);
+            alert('Some problem occurred');
         }
-        formData.append("file", files[0])
-        //save the Image we chose inside the Node Server 
-        Axios.post('/api/product/uploadImage', formData, config)
-            .then(response => {
-                if (response.data.success) {
-
-                    setImages([...Images, response.data.image])
-                    props.refreshFunction([...Images, response.data.image])
-
-                } else {
-                    alert('Failed to save the Image in Server')
-                }
-            })
     }
 
 
@@ -35,7 +34,7 @@ function FileUpload(props) {
         newImages.splice(currentIndex, 1)
 
         setImages(newImages)
-        props.refreshFunction(newImages)
+        props.refreshFunction(prevImages => prevImages.filter((x, index) => index !== currentIndex))
     }
 
     return (
@@ -52,8 +51,6 @@ function FileUpload(props) {
                     }}
                         {...getRootProps()}
                     >
-                        {console.log('getRootProps', { ...getRootProps() })}
-                        {console.log('getInputProps', { ...getInputProps() })}
                         <input {...getInputProps()} />
                         <Icon type="plus" style={{ fontSize: '3rem' }} />
 
@@ -65,7 +62,7 @@ function FileUpload(props) {
 
                 {Images.map((image, index) => (
                     <div onClick={() => onDelete(image)}>
-                        <img style={{ minWidth: '300px', width: '300px', height: '240px' }} src={`http://localhost:5000/${image}`} alt={`productImg-${index}`} />
+                        <img style={{ minWidth: '300px', width: '300px', height: '240px' }} src={`${image}`} alt={`productImg-${index}`} />
                     </div>
                 ))}
 
