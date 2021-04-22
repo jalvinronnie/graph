@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react';
 import { Route, Switch } from "react-router-dom";
 import Auth from "../hoc/auth";
+import RoleCheck from "../hoc/role";
 // pages for this product
 import LandingPage from "./views/LandingPage/LandingPage.js";
 import LoginPage from "./views/LoginPage/LoginPage.js";
@@ -21,9 +22,9 @@ function App() {
           <Route exact path="/" component={Auth(LandingPage, null)} />
           <Route exact path="/login" component={Auth(LoginPage, false)} />
           <Route exact path="/register" component={Auth(RegisterPage, false)} />
-          <Route exact path="/product/upload" component={Auth(UploadProductPage, true)} />
+          <Route exact path="/product/upload" component={Auth(RoleCheck(UploadProductPage, 'designer'), true)} />
           <Route exact path="/product/:productId" component={Auth(DetailProductPage, null)} />
-          <Route exact path="/user/cart" component={Auth(CartPage, true)} />
+          <Route exact path="/user/cart" component={Auth(RoleCheck(CartPage, 'customer'), true)} />
           <Route exact path="/history" component={Auth(HistoryPage, true)} />
 
         </Switch>
