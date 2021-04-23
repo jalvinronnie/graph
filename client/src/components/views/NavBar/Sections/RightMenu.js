@@ -30,16 +30,15 @@ function RightMenu(props) {
         </Menu.Item>
       </Menu>
     )
-  } else {
+  } 
+  
+  
+  if(user.userData && user.userData.role === 'customer') {
     return (
       <Menu mode={props.mode}>
 
         <Menu.Item key="history">
           <a href="/history">History</a>
-        </Menu.Item>
-
-        <Menu.Item key="upload">
-          <a href="/product/upload">Upload</a>
         </Menu.Item>
 
         <Menu.Item key="cart" style={{ paddingBottom: 3 }}>
@@ -51,6 +50,30 @@ function RightMenu(props) {
         </Menu.Item>
 
 
+        <Menu.Item key="logout">
+          <a onClick={logoutHandler}>Logout</a>
+        </Menu.Item>
+      </Menu>
+    )
+  }
+
+  if(user.userData && user.userData.role === 'designer') {
+    return (
+      <Menu mode={props.mode}>
+        <Menu.Item key="upload">
+          <a href="/product/upload">Upload</a>
+        </Menu.Item>
+
+        <Menu.Item key="logout">
+          <a onClick={logoutHandler}>Logout</a>
+        </Menu.Item>
+      </Menu>
+    )
+  }
+
+  else {
+    return (
+      <Menu mode={props.mode}>
         <Menu.Item key="logout">
           <a onClick={logoutHandler}>Logout</a>
         </Menu.Item>

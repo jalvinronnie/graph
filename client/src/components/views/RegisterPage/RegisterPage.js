@@ -9,6 +9,7 @@ import {
   Form,
   Input,
   Button,
+  Radio
 } from 'antd';
 
 const formItemLayout = {
@@ -44,7 +45,8 @@ function RegisterPage(props) {
         lastName: '',
         name: '',
         password: '',
-        confirmPassword: ''
+        confirmPassword: '',
+        role: 1
       }}
       validationSchema={Yup.object().shape({
         name: Yup.string()
@@ -59,7 +61,8 @@ function RegisterPage(props) {
           .required('Password is required'),
         confirmPassword: Yup.string()
           .oneOf([Yup.ref('password'), null], 'Passwords must match')
-          .required('Confirm Password is required')
+          .required('Confirm Password is required'),
+        role: Yup.number().required('Role is required')
       })}
       onSubmit={(values, { setSubmitting }) => {
         setTimeout(() => {
@@ -69,13 +72,15 @@ function RegisterPage(props) {
             password: values.password,
             name: values.name,
             lastname: values.lastname,
-            image: `http://gravatar.com/avatar/${moment().unix()}?d=identicon`
+            image: `http://gravatar.com/avatar/${moment().unix()}?d=identicon`,
+            role: ['customer', 'designer'][values.role - 1]
           };
 
           dispatch(registerUser(dataToSubmit)).then(response => {
             if (response.payload.success) {
               props.history.push("/login");
             } else {
+              console.log(response);
               alert(response.payload.err.errmsg)
             }
           })
@@ -150,6 +155,13 @@ function RegisterPage(props) {
                 {errors.email && touched.email && (
                   <div className="input-feedback">{errors.email}</div>
                 )}
+              </Form.Item>
+
+              <Form.Item required label="Role">
+                <Radio.Group name="role" value={values.role} onChange={handleChange}>
+                  <Radio value={1}>Customer</Radio>
+                  <Radio value={2}>Designer</Radio>
+                </Radio.Group>
               </Form.Item>
 
               <Form.Item required label="Password" hasFeedback validateStatus={errors.password && touched.password ? "error" : 'success'}>
