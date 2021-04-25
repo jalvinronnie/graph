@@ -41,6 +41,12 @@ const userSchema = mongoose.Schema({
     },
     tokenExp: {
         type: Number
+    },
+    products: {
+        type: [ { type: mongoose.Schema.Types.ObjectId, ref: 'Product' } ]
+    },
+    payments: {
+        type: [ { type: mongoose.Schema.Types.ObjectId, ref: 'Payment' } ]
     }
 })
 

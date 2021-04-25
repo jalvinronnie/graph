@@ -1,3 +1,5 @@
+import "bootstrap/dist/css/bootstrap.min.css";
+import "../../../shards-dashboards.1.1.0.min.css";
 import { Row, Col as ShardCol } from 'shards-react';
 import { Typography, Card, Col } from 'antd';
 import React, { useState, useEffect } from 'react';

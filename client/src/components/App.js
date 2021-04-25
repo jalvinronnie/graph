@@ -15,9 +15,6 @@ import HistoryPage from './views/HistoryPage/HistoryPage';
 import DhistoryPage from './views/DhistoryPage/DhistoryPage';
 import Dashboard from './views/Dashboard/Dashboard';
 
-import "bootstrap/dist/css/bootstrap.min.css";
-import "../shards-dashboards.1.1.0.min.css";
-
 function App() {
   return (
     <Suspense fallback={(<div>Loading...</div>)}>
