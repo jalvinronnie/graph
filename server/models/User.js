@@ -43,9 +43,18 @@ const userSchema = mongoose.Schema({
     tokenExp: {
         type: Number
     },
+
     balance: {
         type: Float,
         default: 0
+},
+
+    products: {
+        type: [ { type: mongoose.Schema.Types.ObjectId, ref: 'Product' } ]
+    },
+    payments: {
+        type: [ { type: mongoose.Schema.Types.ObjectId, ref: 'Payment' } ]
+
     }
 })
 
