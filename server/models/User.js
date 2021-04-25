@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const jwt = require('jsonwebtoken');
 const moment = require('moment');
+const Float = require('mongoose-float').loadType(mongoose,2);
 
 const userSchema = mongoose.Schema({
     name: {
@@ -41,6 +42,10 @@ const userSchema = mongoose.Schema({
     },
     tokenExp: {
         type: Number
+    },
+    balance: {
+        type: Float,
+        default: 0
     }
 })
 
