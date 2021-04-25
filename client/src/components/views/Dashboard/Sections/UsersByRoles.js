@@ -29,7 +29,8 @@ class UsersByRoles extends React.Component {
     const sum = designers + customers;
 
     const a = [
-        (designers / sum) * 100, (customers / sum) * 100
+        ((designers / sum) * 100).toFixed(2), 
+        ((customers / sum) * 100).toFixed(2)
     ]
 
     const chartData = {
