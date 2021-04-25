@@ -29,18 +29,30 @@ router.get('/details', async (req, res) => {
 
     const avgDesignerRevenue = revenues.reduce((a, b) => a + b, 0) / revenues.length;
 
-    const result1 = await Payment.aggregate([
-        {
-            $group : {
-                _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt"} },
-                count: { $sum: 1 },
-                price: { $sum: "$productPrice" }
-            }
-        }
-    ]).exec();
-    console.log(result1);
-
     res.status(200).json({ revenueGenerated, productsSold, productList, userList, transactions, designersActive, customersActive, totalUsers, numOfTransactions, designerRevenues, avgDesignerRevenue });
 })
+
+router.get('/details2', async (req, res) => {
+    const userList = await User.find({});
+    const designersActive = userList.filter(user => user.role === 'designer').length;
+    const customersActive = userList.filter(user => user.role === 'customer').length;
+    const totalUsers = userList.filter(user => user.role === 'designer' || user.role === 'customer').length;
+    res.status(200).json({ designersActive, customersActive, totalUsers });
+})
+
+
+router.get('/details3', async (req,res) => {
+    const salesPerDate = await Payment.aggregate([
+        {
+            $group : {
+                _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+                count: { $sum: 1 },
+                sales: { $sum: "$productPrice" }
+            }
+        }
+    ]).sort({ _id: 1 }).exec();
+
+    res.status(200).json({ salesPerDate })
+});
 
 module.exports = router;

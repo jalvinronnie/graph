@@ -105,7 +105,7 @@ const Dashboard = () => {
 
             <Row>
                 <ShardCol lg="8" md="12" sm="12" className="my-4">
-                    <UserOverview />
+                    <UserOverview title="Sales Report"/>
                 </ShardCol>
                 <ShardCol lg="4" md="6" sm="12" className="my-4">
                     <UsersByRoles title="User distribution"/>

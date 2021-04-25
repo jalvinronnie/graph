@@ -22,7 +22,7 @@ class UsersByRoles extends React.Component {
 
   async componentDidMount() {
 
-    const res = await Axios.get('/api/dashboard/details');
+    const res = await Axios.get('/api/dashboard/details2');
 
     const designers = res.data.designersActive;
     const customers = res.data.customersActive;

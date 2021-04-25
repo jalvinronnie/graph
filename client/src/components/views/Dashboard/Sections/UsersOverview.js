@@ -4,6 +4,7 @@ import { Row, Col, Card, Button, CardHeader, CardBody } from "shards-react";
 
 import RangeDatePicker from "./RangeDatePicker";
 import Chart from "./charts";
+import Axios from "axios";
 
 class UsersOverview extends React.Component {
   constructor(props) {
@@ -12,7 +13,98 @@ class UsersOverview extends React.Component {
     this.canvasRef = React.createRef();
   }
 
-  componentDidMount() {
+  data = {
+    labels: Array.from(new Array(30), (_, i) => (i === 0 ? 1 : i)),
+    datasets: [
+      {
+        label: "Current Month",
+        fill: "start",
+        backgroundColor: "rgba(0,123,255,0.1)",
+        borderColor: "rgba(0,123,255,1)",
+        pointBackgroundColor: "#ffffff",
+        pointHoverBackgroundColor: "rgb(0,123,255)",
+        borderWidth: 1.5,
+        pointRadius: 0,
+        pointHoverRadius: 3,
+        data: []
+      },
+      {
+        label: "Past Month",
+        fill: "start",
+        backgroundColor: "rgba(255,65,105,0.1)",
+        borderColor: "rgba(255,65,105,1)",
+        pointBackgroundColor: "#ffffff",
+        pointHoverBackgroundColor: "rgba(255,65,105,1)",
+        borderDash: [3, 3],
+        borderWidth: 1,
+        pointRadius: 0,
+        pointHoverRadius: 2,
+        pointBorderColor: "rgba(255,65,105,1)",
+        data: []
+      }
+    ]
+  }
+
+  state = {
+    chartData: this.data
+  }
+
+  createDataArray(perdatesales, start, end) {
+    const today = new Date();
+    const aMonthAgo = (today) => new Date(new Date(today).getTime() - 30 * 24 * 60 * 60 * 1000);
+
+    end = end || today;
+    start = start || aMonthAgo(end);
+
+    const perdatesalesObj = {};
+
+    perdatesales.forEach(sale => {
+      perdatesalesObj[sale._id] = sale;
+    })
+
+    const salesArray = [];
+    const labels = [];
+
+    for(let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+      let it = new Date(d.getTime());
+      salesArray.push({
+        d: it,
+        sales: perdatesalesObj[it.toLocaleDateString().split('/').reverse().join('-')] || 0
+      });
+
+      const [a, b] = it.toLocaleDateString().split('/');
+      labels.push(`${a}/${b}`);
+    }
+
+    const count = salesArray.map(sale => sale.sales.count);
+    const sales = salesArray.map(sale => sale.sales.sales);
+
+    return [[sales, count], labels, salesArray];
+  }
+
+  async componentDidMount() {
+
+    const result = await Axios.get('/api/dashboard/details3')
+    console.log(result);
+    const [[sales, count], labels, salesArray] = this.createDataArray(result.data.salesPerDate);
+
+    await this.setState(prev => (
+      {
+        ...prev,
+        salesArray,
+        chartData: {
+          ...prev.chartData,
+          labels,
+          datasets: prev.chartData.datasets.map((dataset, index) => ({
+            ...dataset,
+            data: index ? sales: count
+          }))
+        }
+      }
+    ));
+
+    console.log('state',this.state)
+
     const chartOptions = {
       ...{
         responsive: true,
@@ -35,7 +127,7 @@ class UsersOverview extends React.Component {
               ticks: {
                 callback(tick, index) {
                   // Jump every 7 values on the X axis labels to avoid clutter.
-                  return index % 7 !== 0 ? "" : tick;
+                  return index % 2 !== 0 ? "" : tick;
                 }
               }
             }
@@ -70,7 +162,7 @@ class UsersOverview extends React.Component {
 
     const BlogUsersOverview = new Chart(this.canvasRef.current, {
       type: "LineWithLine",
-      data: this.props.chartData,
+      data: this.state.chartData,
       options: chartOptions
     });
 
@@ -78,7 +170,7 @@ class UsersOverview extends React.Component {
     const buoMeta = BlogUsersOverview.getDatasetMeta(0);
     buoMeta.data[0]._model.radius = 0;
     buoMeta.data[
-      this.props.chartData.datasets[0].data.length - 1
+      this.state.chartData.datasets[0].data.length - 1
     ]._model.radius = 0;
 
     // Render the chart.
@@ -132,101 +224,5 @@ UsersOverview.propTypes = {
   chartOptions: PropTypes.object
 };
 
-UsersOverview.defaultProps = {
-  title: "Sales generated",
-  chartData: {
-    labels: Array.from(new Array(30), (_, i) => (i === 0 ? 1 : i)),
-    datasets: [
-      {
-        label: "Current Month",
-        fill: "start",
-        data: [
-          500,
-          800,
-          320,
-          180,
-          240,
-          320,
-          230,
-          650,
-          590,
-          1200,
-          750,
-          940,
-          1420,
-          1200,
-          960,
-          1450,
-          1820,
-          2800,
-          2102,
-          1920,
-          3920,
-          3202,
-          3140,
-          2800,
-          3200,
-          3200,
-          3400,
-          2910,
-          3100,
-          4250,
-        ],
-        backgroundColor: "rgba(0,123,255,0.1)",
-        borderColor: "rgba(0,123,255,1)",
-        pointBackgroundColor: "#ffffff",
-        pointHoverBackgroundColor: "rgb(0,123,255)",
-        borderWidth: 1.5,
-        pointRadius: 0,
-        pointHoverRadius: 3
-      },
-      {
-        label: "Past Month",
-        fill: "start",
-        data: [
-          380,
-          430,
-          120,
-          230,
-          410,
-          740,
-          472,
-          219,
-          391,
-          229,
-          400,
-          203,
-          301,
-          380,
-          291,
-          620,
-          700,
-          300,
-          630,
-          402,
-          320,
-          380,
-          289,
-          410,
-          300,
-          530,
-          630,
-          720,
-          780,
-          1200
-        ],
-        backgroundColor: "rgba(255,65,105,0.1)",
-        borderColor: "rgba(255,65,105,1)",
-        pointBackgroundColor: "#ffffff",
-        pointHoverBackgroundColor: "rgba(255,65,105,1)",
-        borderDash: [3, 3],
-        borderWidth: 1,
-        pointRadius: 0,
-        pointHoverRadius: 2,
-        pointBorderColor: "rgba(255,65,105,1)"
-      }
-    ]
-  }
-};
 
 export default UsersOverview;
