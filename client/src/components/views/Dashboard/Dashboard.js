@@ -60,7 +60,7 @@ const Dashboard = () => {
                     },
                     {
                         title: 'Revenue generated',
-                        value: res.data.revenueGenerated
+                        value: `$${res.data.revenueGenerated}`
                     },
                     {
                         title: 'Designers active',
@@ -76,7 +76,7 @@ const Dashboard = () => {
                     },
                     {
                         title: 'Avg. designer revenue',
-                        value: res.data.avgDesignerRevenue
+                        value: `$${res.data.avgDesignerRevenue}`
                     },
                 ])
             })
