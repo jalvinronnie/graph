@@ -10,7 +10,6 @@ export default function (ComposedClass, role) {
 
         useEffect(() => {
             dispatch(auth()).then(async response => {
-                console.log('THIS,',response.payload)
                 if(response.payload.role !== role) {
                     props.history.push('/');
                 }
