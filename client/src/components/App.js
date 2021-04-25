@@ -13,6 +13,7 @@ import DetailProductPage from './views/DetailProductPage/DetailProductPage';
 import CartPage from './views/CartPage/CartPage';
 import HistoryPage from './views/HistoryPage/HistoryPage';
 import DhistoryPage from './views/DhistoryPage/DhistoryPage';
+import Dashboard from './views/Dashboard/Dashboard';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route exact path="/user/cart" component={Auth(RoleCheck(CartPage, 'customer'), true)} />
           <Route exact path="/history" component={Auth(HistoryPage, true)} />
           <Route exact path="/dhistory" component={Auth(DhistoryPage, true)} />
+          <Route exact path="/admin" component={Auth(RoleCheck(Dashboard, 'admin'), true)}/>
         </Switch>
       </div>
       <Footer />

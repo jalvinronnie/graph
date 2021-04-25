@@ -1,16 +1,29 @@
 import React from 'react';
 import { Menu } from 'antd';
-const SubMenu = Menu.SubMenu;
-const MenuItemGroup = Menu.ItemGroup;
+import { useSelector } from 'react-redux';
 
 function LeftMenu(props) {
+  const user = useSelector(state => state.user);
+
+  if(user.userData && user.userData.role === 'admin') {
+    return (
+      <Menu mode={props.mode}>
+        <Menu.Item key="home">
+          <a href="/">Home</a>
+        </Menu.Item>
+        <Menu.Item key="admin">
+          <a href="/admin">Admin</a>
+        </Menu.Item>
+      </Menu>
+    )
+  }
+
   return (
     <Menu mode={props.mode}>
-    <Menu.Item key="mail">
-      <a href="/">Home</a>
-    </Menu.Item>
-   
-  </Menu>
+      <Menu.Item key="home">
+          <a href="/">Home</a>
+        </Menu.Item>
+    </Menu>
   )
 }
 

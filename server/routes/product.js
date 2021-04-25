@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { Product } = require("../models/Product");
+const { User } = require("../models/User");
 const multer = require('multer');
 
 const { auth } = require("../middleware/auth");
@@ -49,7 +50,16 @@ router.post("/uploadProduct", auth, isDesigner,(req, res) => {
 
     product.save((err) => {
         if (err) return res.status(400).json({ success: false, err })
-        return res.status(200).json({ success: true })
+
+        User.findOneAndUpdate({ _id: req.user._id }, { $push: { "products": product.id } })
+            .then(() => {
+                return res.status(200).json({ success: true })
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({ err })
+            })
+
     })
 
 });
