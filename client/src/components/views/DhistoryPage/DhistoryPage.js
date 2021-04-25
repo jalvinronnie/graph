@@ -14,13 +14,13 @@ import {
 } from 'antd';
 import Axios from "axios";
  
-function DhistoryPage() {
+function DhistoryPage(props) {
     const [amount, setAmount] = useState(0);
     const [email, setEmail] = useState("");
   
     function handleSubmit(){
-        console.log("mofo");
-        Axios.post("http://localhost:5000/api/withdraw/withdraw", {amount, email}).then((response)=>{
+        console.log(props);
+        Axios.post("http://localhost:5000/api/withdraw/withdraw", {amount, email,id:props.user.userData._id}).then((response)=>{
             console.log(response.data);
         })
     }

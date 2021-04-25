@@ -5,7 +5,9 @@ const {User} = require('../models/User');
 const { isDesigner } = require('../middleware/roles');
 const { auth } = require("../middleware/auth");
 
-router.post("/withdraw",auth,isDesigner,(req,res)=>{
+
+
+router.post("/withdraw",(req,res)=>{
     paypal.configure({
         'mode': 'sandbox', //sandbox or live
         'client_id': process.env.CLIENT_ID,
@@ -14,7 +16,7 @@ router.post("/withdraw",auth,isDesigner,(req,res)=>{
             'custom': 'header'
         }
     });
-    User.findById(req.user._id,function(err,designer){
+    User.findById(req.body.id,function(err,designer){
         if(designer.balance>=req.body.amount&&req.body.amount>0&&!err){
             var create_payout_json = {
                 "sender_batch_header": {
@@ -38,10 +40,9 @@ router.post("/withdraw",auth,isDesigner,(req,res)=>{
                     console.log(error.response);
                     throw error;
                 } else {
-                    console.log(payout);
-                    res.send('Success');
+                    //res.send('Success');
                     let updatedBalance=designer.balance-req.body.amount;
-                    User.updateOne( {_id:req.user._id},{balance: updatedBalance},function(ERR,RES){
+                    User.updateOne( {_id:req.body.id},{balance: updatedBalance},function(ERR,RES){
                         if(ERR){
                             console.log(RES);
                         }
@@ -50,7 +51,8 @@ router.post("/withdraw",auth,isDesigner,(req,res)=>{
             });
         }else{
             //Insufficient Balance
-            res.status(400).json({err:err});
+            
+            //res.status(400).json({err:err});
         }
     });
 });
