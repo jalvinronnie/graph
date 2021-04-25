@@ -5,8 +5,7 @@ const Designer = require('../models/User');
 const { isDesigner } = require('../middleware/roles');
 const { auth } = require("../middleware/auth");
 
-router.post("/withdraw",(req,res)=>{
-
+router.post("/withdraw",auth,isDesigner,(req,res)=>{
     paypal.configure({
         'mode': 'sandbox', //sandbox or live
         'client_id': process.env.CLIENT_ID,
