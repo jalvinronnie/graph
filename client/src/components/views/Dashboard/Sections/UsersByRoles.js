@@ -9,6 +9,7 @@ import {
   CardBody,
   CardFooter
 } from "shards-react";
+import Axios from 'axios';
 
 import Chart from "./charts";
 
@@ -19,10 +20,38 @@ class UsersByRoles extends React.Component {
     this.canvasRef = React.createRef();
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+
+    const res = await Axios.get('/api/dashboard/details');
+
+    const designers = res.data.designersActive;
+    const customers = res.data.customersActive;
+    const sum = designers + customers;
+
+    const a = [
+        (designers / sum) * 100, (customers / sum) * 100
+    ]
+
+    const chartData = {
+        datasets: [
+            {
+                hoverBorderColor: "#ffffff",
+                data: a,
+                backgroundColor: [
+                    "rgba(0,123,255,0.9)",
+                    "rgba(0,123,255,0.5)",
+                ]
+            }
+        ],
+        labels: [
+            "Customer",
+            "Designer",
+        ]
+    }
+
     const chartConfig = {
       type: "pie",
-      data: this.props.chartData,
+      data: chartData,
       options: {
         ...{
           legend: {
@@ -103,26 +132,6 @@ UsersByRoles.propTypes = {
    * The chart data.
    */
   chartData: PropTypes.object
-};
-
-UsersByRoles.defaultProps = {
-  title: "User distribution",
-  chartData: {
-    datasets: [
-      {
-        hoverBorderColor: "#ffffff",
-        data: [68.3, 31.7],
-        backgroundColor: [
-          "rgba(0,123,255,0.9)",
-          "rgba(0,123,255,0.5)",
-        ]
-      }
-    ],
-    labels: [
-        "customer",
-        "designer", 
-    ]
-  }
 };
 
 export default UsersByRoles;
