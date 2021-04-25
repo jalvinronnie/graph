@@ -1,6 +1,7 @@
 import React from 'react';
 import PaypalExpressBtn from 'react-paypal-express-checkout';
 
+
 export default class Paypal extends React.Component {
     render() {
         const onSuccess = (payment) => {
@@ -8,7 +9,6 @@ export default class Paypal extends React.Component {
             console.log("The payment was succeeded!", payment);
             // You can bind the "payment" object's value to your state or props or whatever here, please see below for sample returned data
             this.props.onSuccess(payment);
-        
         }
 
         const onCancel = (data) => {
@@ -30,8 +30,9 @@ export default class Paypal extends React.Component {
         // Document on Paypal's currency code: https://developer.paypal.com/docs/classic/api/currency_codes/
 
         const client = {
-            sandbox: 'AelMA7rUdxce2INjEX1y9KQ47L4J8Idv7rIROe3if2vnMqsIkIz5FFUvA5g-cZiRCnRl3X2EAZljDxWw',
+            sandbox: 'AcC3FnVyM2fK6GlceH2rE1hmluehRqltx4DG8LCPN6hBkun72FwUOuoqbMAFRBqcNOlmIfePBXiBJ0yT',
             production: 'YOUR-PRODUCTION-APP-ID',
+            
         }
         // In order to get production's app-ID, you will have to send your app to Paypal for approval first
         // For sandbox app-ID (after logging into your developer account, please locate the "REST API apps" section, click "Create App"):
