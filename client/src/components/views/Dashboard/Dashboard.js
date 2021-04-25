@@ -1,7 +1,9 @@
 import { Row, Col as ShardCol } from 'shards-react';
 import { Typography, Card, Col } from 'antd';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import UserOverview from './Sections/UsersOverview';
+import Axios from 'axios';
+import UsersByRoles from './Sections/UsersByRoles';
 
 const { Text, Title } = Typography;
 
@@ -43,6 +45,14 @@ const Dashboard = () => {
         },
     ])
 
+    useEffect(() => {
+        
+        Axios.get('/api/dashboard/details')
+            .then(res => console.log(res))
+            .catch(err => console.log(err));
+
+    }, []); 
+
     return (
         <div style={{ width: '85%', margin: '3rem auto' }}>
             <Row 
@@ -66,10 +76,9 @@ const Dashboard = () => {
                 <ShardCol lg="8" md="12" sm="12" className="my-4">
                     <UserOverview />
                 </ShardCol>
-                <ShardCol></ShardCol>
-                <ShardCol></ShardCol>
-                <ShardCol></ShardCol>
-                <ShardCol></ShardCol>
+                <ShardCol lg="4" md="6" sm="12" className="my-4">
+                    <UsersByRoles/>
+                </ShardCol>
             </Row>
         </div>
     );
