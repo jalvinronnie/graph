@@ -22,7 +22,7 @@ const connect = mongoose.connect(config.mongoURI, { useNewUrlParser: true, useUn
   .catch(err => console.log(err));
 
 if (process.env.NODE_ENV !== 'production') {
-  app.use(cors({ origin: 'http://localhost:3000' }));
+  app.use(cors({ origin: 'localhost:5000'}));
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -31,6 +31,7 @@ app.use(cookieParser());
 
 app.use('/api/users', require('./routes/users'));
 app.use('/api/product', require('./routes/product'));
+app.use('/api/withdraw', require('./routes/withdraw'));
 
 
 //use this to show the image you have in node js server to client (react js)

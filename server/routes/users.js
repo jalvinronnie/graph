@@ -177,6 +177,9 @@ router.get('/userCartInfo', auth, isCustomer, (req, res) => {
 router.post('/successBuy', auth, isCustomer, (req, res) => {
     let history = [];
     let transactionData = {};
+    let designerData=[];
+    let designerIndex={};
+
 
     //1.Put brief Payment Information inside User Collection 
     req.body.cartDetail.forEach((item) => {
@@ -188,6 +191,24 @@ router.post('/successBuy', auth, isCustomer, (req, res) => {
             quantity: item.quantity,
             paymentId: req.body.paymentData.paymentID
         })
+
+        Product.findById(item._id,function(err1,doc){
+            if(!err1){
+                let writerID=doc.writer;
+                User.findById(writerID,function(err2,Designer){
+                    if(!err2){
+                        let balance=Designer.balance;
+                        balance=balance+item.price;
+                        User.findByIdAndUpdate(writerID,{balance:balance},function(err3,resp){
+                            if(err3){
+                                console.log(err3);
+                            }
+                        })
+                    }
+                })
+            }
+        })
+
     })
 
     //2.Put Payment Information that come from Paypal into Payment Collection 
