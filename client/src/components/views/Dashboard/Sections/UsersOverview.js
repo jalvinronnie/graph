@@ -28,20 +28,20 @@ class UsersOverview extends React.Component {
         pointHoverRadius: 3,
         data: []
       },
-      {
-        label: "Past Month",
-        fill: "start",
-        backgroundColor: "rgba(255,65,105,0.1)",
-        borderColor: "rgba(255,65,105,1)",
-        pointBackgroundColor: "#ffffff",
-        pointHoverBackgroundColor: "rgba(255,65,105,1)",
-        borderDash: [3, 3],
-        borderWidth: 1,
-        pointRadius: 0,
-        pointHoverRadius: 2,
-        pointBorderColor: "rgba(255,65,105,1)",
-        data: []
-      }
+      // {
+      //   label: "Past Month",
+      //   fill: "start",
+      //   backgroundColor: "rgba(255,65,105,0.1)",
+      //   borderColor: "rgba(255,65,105,1)",
+      //   pointBackgroundColor: "#ffffff",
+      //   pointHoverBackgroundColor: "rgba(255,65,105,1)",
+      //   borderDash: [3, 3],
+      //   borderWidth: 1,
+      //   pointRadius: 0,
+      //   pointHoverRadius: 2,
+      //   pointBorderColor: "rgba(255,65,105,1)",
+      //   data: []
+      // }
     ]
   }
 
@@ -97,7 +97,7 @@ class UsersOverview extends React.Component {
           labels,
           datasets: prev.chartData.datasets.map((dataset, index) => ({
             ...dataset,
-            data: index ? sales: count
+            data: !index ? sales: count
           }))
         }
       }
