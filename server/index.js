@@ -22,7 +22,7 @@ const connect = mongoose.connect(config.mongoURI, { useNewUrlParser: true, useUn
   .catch(err => console.log(err));
 
 if (process.env.NODE_ENV !== 'production') {
-  app.use(cors({ origin: 'localhost:5000'}));
+  app.use(cors());
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
