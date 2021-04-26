@@ -12,8 +12,11 @@ const paymentSchema = mongoose.Schema({
     product: {
         type: Array,
         default: []
+    },
+    productPrice: {
+        type: Number,
+        min: 0,
     }
-
 
 }, { timestamps: true })
 

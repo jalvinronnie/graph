@@ -230,8 +230,12 @@ router.post('/successBuy', auth, isCustomer, (req, res) => {
         (err, user) => {
             if (err) return res.json({ success: false, err });
 
+            let productPrice = transactionData.product.reduce((sum, product) => sum + product.price * product.quantity, 0);
 
-            const payment = new Payment(transactionData)
+            const payment = new Payment({
+                ...transactionData,
+                productPrice
+            })
             payment.save((err, doc) => {
                 if (err) return res.json({ success: false, err });
 
