@@ -76,7 +76,7 @@ const Dashboard = () => {
                     },
                     {
                         title: 'Avg. designer revenue',
-                        value: `$${res.data.avgDesignerRevenue}`
+                        value: `$${parseFloat(res.data.avgDesignerRevenue).toFixed(2)}`
                     },
                 ])
             })
