@@ -174,7 +174,7 @@ router.get('/userCartInfo', auth, isCustomer, (req, res) => {
 
 
 
-router.post('/successBuy', auth, isCustomer, (req, res) => {
+router.post('/successBuy', auth, isCustomer,async (req, res) => {
     let history = [];
     let transactionData = {};
     let designerData=[];
@@ -182,7 +182,7 @@ router.post('/successBuy', auth, isCustomer, (req, res) => {
 
 
     //1.Put brief Payment Information inside User Collection 
-    req.body.cartDetail.forEach((item) => {
+    for(const item of req.body.cartDetail){
         history.push({
             dateOfPurchase: Date.now(),
             name: item.title,
@@ -192,14 +192,14 @@ router.post('/successBuy', auth, isCustomer, (req, res) => {
             paymentId: req.body.paymentData.paymentID
         })
 
-        Product.findById(item._id,function(err1,doc){
+        await Product.findById(item._id,async function(err1,doc){
             if(!err1){
                 let writerID=doc.writer;
-                User.findById(writerID,function(err2,Designer){
+                await User.findById(writerID,async function(err2,Designer){
                     if(!err2){
                         let balance=Designer.balance;
                         balance=balance+item.price;
-                        User.findByIdAndUpdate(writerID,{balance:balance},function(err3,resp){
+                        await User.findByIdAndUpdate(writerID,{balance:balance},function(err3,resp){
                             if(err3){
                                 console.log(err3);
                             }
@@ -209,7 +209,7 @@ router.post('/successBuy', auth, isCustomer, (req, res) => {
             }
         })
 
-    })
+    }
 
     //2.Put Payment Information that come from Paypal into Payment Collection 
     transactionData.user = {
